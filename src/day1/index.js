@@ -2,16 +2,19 @@ const fs = require("fs")
 const text = fs.readFileSync('input.txt', { encoding: 'utf8' })
 const goalTotal = 2020
 
-const findPartner = (index, numberArray) => 
+const findPartner = (index1, index2, numberArray) => 
   numberArray.findIndex((number, idx) =>
-    idx !== index && (numberArray[index] + number) === goalTotal)
+    idx !== index1 && idx !== index2 && index1 !== index2 && 
+    (numberArray[index1] + numberArray[index2] + number) === goalTotal)
 
 const findNumbers = numbers => {
   for (let i = 0; i < numbers.length; i++) {
-    const partner = findPartner(i, numbers)
-    if (partner !== -1) {
-      console.log(`The indexes are ${i} and ${partner} or ${numbers[i]} and ${numbers[partner]}`)
-      return numbers[i] * numbers[partner]
+    for (let j = 0; j < numbers.length; j++) {
+      const partner = findPartner(i, j, numbers)
+      if (partner !== -1) {
+        console.log(`The indexes are ${i}, ${j}, and ${partner} or ${numbers[i]}, ${numbers[j]}, and ${numbers[partner]}`)
+        return numbers[i] * numbers[j] * numbers[partner]
+      }
     }
   }
 }
