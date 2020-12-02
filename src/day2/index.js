@@ -11,8 +11,8 @@ const getPwd = line => {
   const policySegments = policy.split(' ')
   const countSegments = policySegments[0].split('-')
   return {
-    min: countSegments[0],
-    max: countSegments[1],
+    firstPosition: countSegments[0],
+    secondPosition: countSegments[1],
     char: policySegments[1],
     password 
   }
@@ -35,14 +35,18 @@ const getPwdArray = async path => {
   }
 }
 
-const getOccurrences = (password, char) =>
-  (password.match(new RegExp(char, "g")) || []).length
+const isSingleOccurrence = ({password, char, firstPosition, secondPosition}) => {
+  const firstPositionEqual = password[firstPosition-1] === char
+  const secondPositionEqual = password[secondPosition-1] === char
+  return !(firstPositionEqual && secondPositionEqual) &&
+    !(!firstPositionEqual && !secondPositionEqual)
+}
+
 
 const numPassing = passwords =>
   passwords.reduce((acc, curr) => {
-    const occurrences = getOccurrences(curr.password, curr.char)
     //console.log(`There are ${occurrences} occurrences of ${curr.char} in ${curr.password}`)
-    if (occurrences >= curr.min && occurrences <= curr.max) {
+    if (isSingleOccurrence(curr)) {
       return acc + 1
     }
     return acc
