@@ -7,7 +7,6 @@ const getLocation = (char, lowerBound, upperBound) =>
     : { newLower: Math.ceil((upperBound + lowerBound) / 2), newUpper: upperBound }
 
 const findHalf = (passInfo, index, lowerBound, upperBound) => {
-  console.log(`char is ${passInfo[index]}, index: ${index}, upper: ${upperBound}, lower: ${lowerBound}`)
   if (index === passInfo.length) {
     return lowerBound
   }
@@ -23,6 +22,18 @@ const getBoardingPass = passInfo => {
   }
 }
 
+const getMissingIDs = (ids, max) => {
+  const missing = [];
+  for (let i = 1; i <= max; i++) {
+    if (ids.indexOf(i) == -1) {
+      missing.push(i);
+    }
+  }
+  return missing
+}
+
 const passes = text.split('\n').map(getBoardingPass)
-const maxID = passes.map( pass => pass.id ).reduce((acc, curr) => Math.max(acc, curr))
+const passIDs = passes.map( pass => pass.id )
+const maxID = passIDs.reduce((acc, curr) => Math.max(acc, curr))
 console.log(`The max ID is ${maxID}`)
+console.log(`The missing IDs are ${getMissingIDs(passIDs, maxID)}`)
