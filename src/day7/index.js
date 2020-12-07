@@ -29,11 +29,12 @@ const checkRule = (quantity, color, rule, rules) => {
   }, false)
 }
 
-const checkRules = (quantity, color, rules) =>
-  Object.keys(rules).map(rule => checkRule(quantity, color, rules[rule], rules))
+const getCount = (rule, rules) =>
+  rule.reduce((acc, curr) =>
+    acc + Object.values(curr)[0] + Object.values(curr)[0] * getCount(rules[Object.keys(curr)[0]], rules)
+  , 0)
 
 const rules = Object.assign({}, ...text.split('\n').map(parseRule))
-const allowed = checkRules(1, 'shiny gold', rules)
-const totalAllowed = allowed.reduce((acc, curr) => curr ? acc + 1: acc, 0)
+const totalAllowed = getCount(rules['shiny gold'], rules)
 
 console.log(`The num allowed are ${totalAllowed}`)
