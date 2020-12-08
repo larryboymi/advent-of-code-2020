@@ -17,7 +17,7 @@ const getInstruction = line => {
 const processInstructions = instructions => {
   let acc = 0, pos = 0
   const instVisited = [0]
-  while (allUnique(instVisited)) {
+  while (allUnique(instVisited) && pos < instructions.length) {
     const currentInstruction = instructions[pos]
     let nextPos = 0
     switch (currentInstruction.instruction) {
@@ -35,9 +35,29 @@ const processInstructions = instructions => {
     instVisited.push(nextPos)
     pos = nextPos
   }
-  return acc
+  return { acc, instVisited }
+}
+
+const findInstruction = (instructions, visited) => {
+  for (let i = 0; i < visited.length; i++) {
+    const instruction = instructions[visited[i]]
+    const isJmp = instruction.instruction === 'jmp'
+    if (instruction.instruction === 'acc') {
+      continue
+    } else {
+      instructions[visited[i]].instruction = isJmp ? 'nop' : 'jmp'
+      const check = processInstructions(instructions)
+      if (check.instVisited.includes(instructions.length - 1)) {
+        console.log(`We had to change instruction ${visited[i]}`)
+        break
+      }
+      instructions[visited[i]].instruction = isJmp ? 'jmp' : 'nop'
+    }
+  }
 }
 
 const instructions = text.split('\n').map(getInstruction)
+const initialRun = processInstructions(instructions)
+console.log(`The acc when the loop hits is ${initialRun.acc}`)
 
-console.log(`The acc when the loop hits is ${processInstructions(instructions)}`)
+//findInstruction(instructions, initialRun.instVisited)
