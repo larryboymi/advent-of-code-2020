@@ -53,7 +53,7 @@ var createOperator = function(t) {
 
 function Plus(t) {
 	Operator.call(this, t);
-	this.value = 0;
+	this.value = 1;
 	this.applyFunction = function(arg1,arg2) {
 		return arg1 + arg2;
 	}
@@ -63,7 +63,7 @@ Plus.prototype = Object.create(Operator.prototype);
 
 function Minus(t) {
 	Operator.call(this, t);
-	this.value = 0;
+	this.value = 1;
 	this.applyFunction = function(arg1,arg2) {
 		return arg1 - arg2;
 	}
